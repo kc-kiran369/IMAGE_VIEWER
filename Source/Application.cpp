@@ -1,12 +1,17 @@
 #include<iostream>
+#include<vector>
 #include<string>
+#include<sstream>
 #include"glfw3.h"
 #include"UI.h"
+#include"ImGuiFileDialog.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include"Image.h"
 
 constexpr auto WIDTH = 800;
 constexpr auto HEIGHT = 600;
+
+bool isDialogOpen = false;
 
 int main()
 {
@@ -23,10 +28,11 @@ int main()
 	CoreUI coreUI(window);
 	coreUI.OnAttach();
 
-	Image pain;
-	pain.Open("Images\\Image.png");
+	Image icon("Images//AddIcon.png");
+	std::vector<Image*> images;
+	Image activeImage;
 
-	float scale = 1.0f;
+	float imageScale = 1.0f;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -38,7 +44,6 @@ int main()
 		ImGui::BeginMainMenuBar();
 		if (ImGui::BeginMenu("File"))
 		{
-			ImGui::MenuItem("Open");
 			if (ImGui::MenuItem("Exit"))
 			{
 				exit(0);
@@ -48,23 +53,45 @@ int main()
 		ImGui::EndMainMenuBar();
 
 		ImGui::Begin("Image");
-		scale = ImGui::GetWindowWidth() / mode->width;
-		/// - (float)pain.GetHeight())
-		std::cout << pain.GetHeight() << std::endl;
-		ImGui::SetCursorPos(ImVec2{ 0.0f, (ImGui::GetWindowHeight()) * 0.5f });
-		ImGui::Image((void*)pain.GetRendererID(), ImVec2{ (float)pain.GetWidth() * scale ,(float)pain.GetHeight() * scale });
+		if (images.size() != 0)
+		{
+			imageScale = ImGui::GetWindowWidth() / mode->width;
+			ImGui::SetCursorPos(ImVec2{ 0.0f, (ImGui::GetWindowHeight() - (activeImage.GetHeight() * imageScale)) * 0.5f });
+			ImGui::Image((void*)activeImage.GetRendererID(), ImVec2{ (float)activeImage.GetWidth() * imageScale ,(float)activeImage.GetHeight() * imageScale });
+		}
 		ImGui::End();
 
 		ImGui::Begin("Image Browser");
-		for (int i = 1; i < 15; i++)
+		int cellSize = 50;
+		for (int i = 1; i <= images.size(); i++)
 		{
-			int cellSize = 70;
-			int cell = ImGui::GetWindowWidth() / (cellSize + 20);
-			ImGui::ImageButton((void*)pain.GetRendererID(), ImVec2{ (float)cellSize,(float)cellSize });
-			if (i % cell != 0)
+			int noOfCellPerRow = ImGui::GetWindowWidth() / (cellSize + 20);
+			if (noOfCellPerRow == 0)
+				noOfCellPerRow = 1;
+			if (ImGui::ImageButton((void*)(*images[i-1]).GetRendererID(), ImVec2{ (float)cellSize,(float)cellSize }))
+			{
+				activeImage = *images[i-1];
+			}
+			if (i % noOfCellPerRow != 0)
 				ImGui::SameLine();
 		}
+		if (ImGui::ImageButton((void*)icon.GetRendererID(), ImVec2{ (float)cellSize,(float)cellSize }))
+		{
+			ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose Image", ".jpg,.png,", ".");
+		}
 		ImGui::End();
+
+		if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey", ImGuiWindowFlags_NoDocking, ImVec2{ 300.0f,100.0f }))
+		{
+			if (ImGuiFileDialog::Instance()->IsOk())
+			{
+				std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+				std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+
+				images.push_back(new Image(filePathName.c_str()));			//Image Insertion
+			}
+			ImGuiFileDialog::Instance()->Close();
+		}
 
 		coreUI.End();
 		glfwPollEvents();
@@ -73,4 +100,5 @@ int main()
 
 	coreUI.OnDetach();
 	glfwTerminate();
+	return 0;
 }

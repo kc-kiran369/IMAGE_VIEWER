@@ -47,9 +47,22 @@ void CoreUI::End()
 void CoreUI::Style()
 {
 	ImGuiStyle& style = ImGui::GetStyle();
-	//style.FramePadding = ImVec2{ 0.0f,0.0f };
-	//style.CellPadding = ImVec2{ 0.0f,0.0f };
-	//style.WindowPadding = ImVec2{ 0.0f,0.0f };
-	style.TabRounding = 2;
-	style.ItemInnerSpacing = { 2,10 };
+	style.WindowMenuButtonPosition = ImGuiDir_None;
+	style.Colors[ImGuiCol_TitleBg] = ImVec4{ 39.0f / 255.0f, 46.0f / 255.0f, 57.0f / 255.0f,1.0f };
+	style.Colors[ImGuiCol_TitleBgActive] = ImVec4{ 39.0f / 255.0f, 46.0f / 255.0f, 57.0f / 255.0f,1.0f };
+	style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 39.0f / 255.0f, 46.0f / 255.0f, 57.0f / 255.0f,1.0f };
+	style.Colors[ImGuiCol_HeaderHovered] = ImVec4{ 39.0f / 255.0f, 46.0f / 255.0f, 57.0f / 255.0f,1.0f };
+	////rgb(66, 203, 169)
+	style.Colors[ImGuiCol_ButtonHovered] = ImVec4{ 66.0f / 255.0f, 203.0f / 255.0f, 169.0f / 255.0f,1.0f };
+	style.Colors[ImGuiCol_DockingPreview] = ImVec4{ 66.0f / 255.0f, 203.0f / 255.0f, 169.0f / 255.0f,1.0f };
+	style.Colors[ImGuiCol_Header] = ImVec4{ 66.0f / 255.0f, 203.0f / 255.0f, 169.0f / 255.0f,1.0f };
+	style.Colors[ImGuiCol_Border] = ImVec4{ 66.0f / 255.0f, 203.0f / 255.0f, 169.0f / 255.0f,1.0f };
+	style.Colors[ImGuiCol_WindowBg] = ImVec4{ 1.0f / 255.0f, 10.0f / 255.0f, 24.0f / 255.0f,1.0f };
+	style.Colors[ImGuiCol_MenuBarBg] = ImVec4{ 1.0f / 255.0f, 10.0f / 255.0f, 24.0f / 255.0f,1.0f };
+	style.Colors[ImGuiCol_DockingEmptyBg] = ImVec4{ 10.0f / 255.0f, 10.0f / 255.0f, 10.0f / 255.0f,1.0f };
+	//style.FramePadding = ImVec2{ 2,2 };
+	style.FrameBorderSize = 0.0f;
+	style.TabBorderSize = 0.0f;
+	style.WindowBorderSize = 0.0f;
+	style.TabRounding = 0;
 }

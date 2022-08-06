@@ -12,6 +12,7 @@ private:
 	int m_Width, m_Height, m_Channel;
 public:
 	Image()=default;
+	Image(const char* _path);
 	~Image();
 
 	void Open(const char* _path);

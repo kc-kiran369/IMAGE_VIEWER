@@ -5,12 +5,12 @@ Image::~Image()
 	glDeleteTextures(GL_TEXTURE_2D, &m_Image);
 }
 
-void Image::Open(const char* _path)
+Image::Image(const char* _path)
 {
 	glGenTextures(1, &m_Image);
 	Bind();
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
@@ -25,6 +25,11 @@ void Image::Open(const char* _path)
 	m_Width = width;
 	m_Height = height;
 	m_Channel = channel;
+}
+
+void Image::Open(const char* _path)
+{
+
 }
 
 unsigned int Image::GetRendererID()
@@ -49,7 +54,7 @@ int Image::GetChannel()
 
 void Image::Bind()
 {
-	glBindTexture(GL_TEXTURE_2D,m_Image);
+	glBindTexture(GL_TEXTURE_2D, m_Image);
 }
 
 void Image::UnBind()
