@@ -1,7 +1,6 @@
 #include<iostream>
 #include<vector>
 #include<string>
-#include<sstream>
 #include"glfw3.h"
 #include"UI.h"
 #include"ImGuiFileDialog.h"
@@ -10,8 +9,6 @@
 
 constexpr auto WIDTH = 800;
 constexpr auto HEIGHT = 600;
-
-bool isDialogOpen = false;
 
 int main()
 {
@@ -56,8 +53,9 @@ int main()
 		if (images.size() != 0)
 		{
 			imageScale = ImGui::GetWindowWidth() / mode->width;
+			/// set image position to center of viewport vertically
 			ImGui::SetCursorPos(ImVec2{ 0.0f, (ImGui::GetWindowHeight() - (activeImage.GetHeight() * imageScale)) * 0.5f });
-			ImGui::Image((void*)activeImage.GetRendererID(), ImVec2{ (float)activeImage.GetWidth() * imageScale ,(float)activeImage.GetHeight() * imageScale });
+			ImGui::Image((void*)activeImage.GetRendererID(), ImVec2{ (float)activeImage.GetWidth() * imageScale  ,(float)activeImage.GetHeight() * imageScale });
 		}
 		ImGui::End();
 
@@ -68,9 +66,9 @@ int main()
 			int noOfCellPerRow = ImGui::GetWindowWidth() / (cellSize + 20);
 			if (noOfCellPerRow == 0)
 				noOfCellPerRow = 1;
-			if (ImGui::ImageButton((void*)(*images[i-1]).GetRendererID(), ImVec2{ (float)cellSize,(float)cellSize }))
+			if (ImGui::ImageButton((void*)(*images[i - 1]).GetRendererID(), ImVec2{ (float)cellSize,(float)cellSize }))
 			{
-				activeImage = *images[i-1];
+				activeImage = *images[i - 1];
 			}
 			if (i % noOfCellPerRow != 0)
 				ImGui::SameLine();
@@ -79,6 +77,13 @@ int main()
 		{
 			ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose Image", ".jpg,.png,", ".");
 		}
+		ImGui::End();
+
+		ImGui::Begin("Details");
+		ImGui::Text("Details");
+		ImGui::Text("Width : %d", activeImage.GetWidth());
+		ImGui::Text("Height : %d", activeImage.GetHeight());
+		ImGui::Text("Format : %s", (activeImage.GetChannel() == 3 ? "RGB" : (activeImage.GetChannel() == 4 ? "RGBA" : "Not Selected")));
 		ImGui::End();
 
 		if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey", ImGuiWindowFlags_NoDocking, ImVec2{ 300.0f,100.0f }))
