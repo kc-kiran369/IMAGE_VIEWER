@@ -52,11 +52,6 @@ int Image::GetChannel()
 	return m_Channel;
 }
 
-const char* Image::GetPath()
-{
-	return m_Path;
-}
-
 void Image::Bind()
 {
 	glBindTexture(GL_TEXTURE_2D, m_Image);

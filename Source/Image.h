@@ -11,7 +11,7 @@ private:
 	const char* m_Path;
 	int m_Width, m_Height, m_Channel;
 public:
-	Image() = default;
+	Image()=default;
 	Image(const char* _path);
 	~Image();
 
@@ -20,7 +20,6 @@ public:
 	int GetWidth();
 	int GetHeight();
 	int GetChannel();
-	const char* GetPath();
 
 	void Bind();
 	void UnBind();
