@@ -47,6 +47,24 @@ int main()
 			}
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("View"))
+		{
+			if (ImGui::MenuItem("Dark Theme"))
+			{
+				ImGui::StyleColorsDark();
+			}
+			if (ImGui::MenuItem("Light Theme"))
+			{
+				ImGui::StyleColorsLight();
+			}
+			if (ImGui::MenuItem("Custom Theme"))
+			{
+				coreUI.Style();
+			}
+
+
+			ImGui::EndMenu();
+		}
 		ImGui::EndMainMenuBar();
 
 		ImGui::Begin("Image");
