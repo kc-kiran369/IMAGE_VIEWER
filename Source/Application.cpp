@@ -2,10 +2,11 @@
 #include<vector>
 #include<string>
 #include"glfw3.h"
-#include"UI.h"
+#include"Headers/UI.h"
 #include"ImGuiFileDialog.h"
 #define STB_IMAGE_IMPLEMENTATION
-#include"Image.h"
+#include"Headers/Image.h"
+#include"Headers/FileDialog.h"
 
 constexpr auto WIDTH = 800;
 constexpr auto HEIGHT = 600;
@@ -93,7 +94,8 @@ int main()
 		}
 		if (ImGui::ImageButton((void*)icon.GetRendererID(), ImVec2{ (float)cellSize,(float)cellSize }))
 		{
-			ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose Image", ".jpg,.png,", ".");
+			std::string path = FileDialog::OpenFile("*.jpg\0", window);
+			images.push_back(new Image(path.c_str()));
 		}
 		ImGui::End();
 
@@ -104,17 +106,6 @@ int main()
 		ImGui::Text("Format : %s", (activeImage.GetChannel() == 3 ? "RGB" : (activeImage.GetChannel() == 4 ? "RGBA" : "Not Selected")));
 		ImGui::End();
 
-		if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey", ImGuiWindowFlags_NoDocking, ImVec2{ 300.0f,100.0f }))
-		{
-			if (ImGuiFileDialog::Instance()->IsOk())
-			{
-				std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-				std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-
-				images.push_back(new Image(filePathName.c_str()));			//Image Insertion
-			}
-			ImGuiFileDialog::Instance()->Close();
-		}
 
 		coreUI.End();
 		glfwPollEvents();
